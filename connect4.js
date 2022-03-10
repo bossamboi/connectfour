@@ -73,7 +73,7 @@ function findSpotForCol(x) {
   return null;
 }
 
-/** placeInTable: update DOM to place piece into HTML table of board */
+/** placeInTable: update DOM to place appropriate color piece into HTML table of board */
 
 function placeInTable(y, x) {
   const piece = document.createElement("div");
@@ -104,15 +104,18 @@ function handleClick(evt) {
     return;
   }
 
+  // update in-memory board with currPlayer value
   board[y][x] = currPlayer;
   console.log(board);
+  // place piece in HTML
   placeInTable(y, x);
 
-  // check for win
+  // check for win condtion prior to tie
   if (checkForWin()) {
     return endGame(`Player ${currPlayer} won!`);
   }
 
+  // check for tie - if top row of game board is filled
   if (board[0].every((cell) => cell !== null)) {
     endGame("It's a tie");
   }
@@ -140,61 +143,38 @@ function checkForWin() {
   function _win(cells) {
     //better solution for _win()
 
-    //   return cells.every(
-    //     ([y, x]) =>
-    //       y >= 0 &&
-    //       y < HEIGHT &&
-    //       x >= 0 &&
-    //       x < WIDTH &&
-    //       board[y][x] === currPlayer
-    //   );
-    // }
-
-    function legalMoves(cells) {
-      for (let i = 0; i < cells.length; i++) {
-        if (cells[i][0] > HEIGHT - 1 || cells[i][1] > WIDTH || cells[i][1] < 0) {
-          return false;
-        }
-      }
-      return true;
-    }
-
-    function sameColors(cells) {
-      return cells.every(([y, x]) => board[y][x] === currPlayer);
-
-      // let player = [];
-
-      // for(let i = 0; i < cells.length; i++){
-
-      //   player.push(board[cells[i][0]][cells[i][1]]);
-      // }
-
-      // //  cells[i][0] cells[i][1]
-
-      // return(player.every(num => num === player[0]));
-    }
-
-    return legalMoves(cells) && sameColors(cells);
+    return cells.every(
+      ([y, x]) => y >= 0 && y < HEIGHT && x >= 0 && x < WIDTH && board[y][x] === currPlayer
+    );
   }
-  // let legalMoves = false;
 
-  // for (let i = 0; i < cells.length; i++) {
-  //   if (cells[i][0] < HEIGHT && cells[i][1] >= 0 && cells[i][1] < WIDTH) {
-  //     continue;
+  // code below for legaMoves and sameColors replaced by combined Array.every above
+
+  // function legalMoves(cells) {
+  //   for (let i = 0; i < cells.length; i++) {
+  //     if (cells[i][0] > HEIGHT - 1 || cells[i][1] > WIDTH || cells[i][1] < 0) {
+  //       return false;
+  //     }
   //   }
-  //   legalMoves = true;
-  // }
-
-  // let players = cells.map((cell) => board[cell[0]][cell[1]]);
-
-  // if (players.every((player) => player === 1) || players.every((player) => player === 2)) {
-  //   samePlayer = true;
-  // }
-
-  // if (legalMoves && samePlayer) {
   //   return true;
-  // } else {
-  //   return false;
+  // }
+
+  // function sameColors(cells) {
+  //   return cells.every(([y, x]) => board[y][x] === currPlayer);
+
+  //   // let player = [];
+
+  //   // for(let i = 0; i < cells.length; i++){
+
+  //   //   player.push(board[cells[i][0]][cells[i][1]]);
+  //   // }
+
+  //   // //  cells[i][0] cells[i][1]       //not sure why this doesnt work within .every()
+
+  //   // return(player.every(num => num === player[0]));
+  // }
+
+  // return legalMoves(cells) && sameColors(cells);
   // }
 
   // using HEIGHT and WIDTH, generate "check list" of coordinates
