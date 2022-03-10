@@ -143,9 +143,19 @@ function checkForWin() {
   function _win(cells) {
     //better solution for _win()
 
+    // [y, x] variables is more elegant and less hacky that cell[0] cell[1]
+
     return cells.every(
       ([y, x]) => y >= 0 && y < HEIGHT && x >= 0 && x < WIDTH && board[y][x] === currPlayer
     );
+    // return cells.every(
+    //   (cell) =>
+    //     cell[0] >= 0 &&
+    //     cell[0] < HEIGHT &&
+    //     cell[1] >= 0 &&
+    //     cell[1] < WIDTH &&
+    //     board[cell[0]][cell[1]] === currPlayer
+    // );
   }
 
   // code below for legaMoves and sameColors replaced by combined Array.every above
